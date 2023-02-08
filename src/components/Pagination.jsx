@@ -9,7 +9,6 @@ const Pagination = ({ setCurrentPage, currentPage, data }) => {
       setCurrentPage(currentPage - 1);
     }
   };
-  console.log(data, currentPage);
 
   const nextPage = () => {
     if (currentPage <= data) {

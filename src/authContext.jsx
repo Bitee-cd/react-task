@@ -17,7 +17,7 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "LOGIN":
+    case "LOGIN": {
       //TODO
       const data = action.payload;
       //save token and details information
@@ -32,20 +32,22 @@ const reducer = (state, action) => {
         token: data.token,
         role: "admin",
       };
-
-    case "LOGOUT":
-      localStorage.clear();
+    }
+    case "LOGOUT": {
+      console.log("logged out");
       return {
         ...state,
         isAuthenticated: false,
         user: null,
         token: null,
       };
-    case "SNACKBAR":
+    }
+    case "SNACKBAR": {
       return {
         ...state,
         globalMessage: action.payload.message,
       };
+    }
     default:
       return state;
   }
@@ -69,9 +71,17 @@ const AuthProvider = ({ children }) => {
   React.useEffect(() => {
     //TODO
     const role = localStorage.getItem("role");
-    setInterval(() => {
-      sdk.check(role);
-    }, 2000);
+    if (state.isAuthenticated) {
+      setInterval(() => {
+        const check = async () => {
+          const result = await sdk.check(role);
+          if (result.message === "TOKEN_EXPIRED") {
+            tokenExpireError(dispatch, "TOKEN_EXPIRED");
+          }
+        };
+        check();
+      }, 20000);
+    }
   }, []);
 
   return (

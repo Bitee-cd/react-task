@@ -5,15 +5,13 @@ import { useNavigate } from "react-router-dom";
 import Board from "../components/Board";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
+import { AuthContext } from "../authContext";
 const AdminDashboardPage = () => {
-  const { state, dispatch } = React.useContext(GlobalContext);
+  const { state, dispatch } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const logout = () => {
-    console.log(state);
     dispatch({ type: "LOGOUT", payload: "" });
-    localStorage.clear();
-    navigate("/admin/login");
-    console.log(state);
+    // navigate("/admin/login");
   };
 
   return (

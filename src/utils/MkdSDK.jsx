@@ -127,6 +127,7 @@ export default function MkdSDK() {
       }),
     });
     const getJson = await getResult.json();
+
     if (getResult.status === 401) {
       throw new Error(getJson.message);
     }
