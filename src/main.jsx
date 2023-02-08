@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { AuthContext } from "./authContext";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import SnackBar from "./components/SnackBar";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
@@ -22,7 +22,7 @@ function renderRoutes(role) {
       return (
         <Routes>
           <Route exact path="/admin/login" element={<AdminLoginPage />}></Route>
-          <Route path="*" exact element={<NotFoundPage />}></Route>
+          <Route path="/error" exact element={<NotFoundPage />}></Route>
         </Routes>
       );
       break;
@@ -31,7 +31,12 @@ function renderRoutes(role) {
 
 function Main() {
   const { state } = React.useContext(AuthContext);
-  useEffect(() => {}, []);
+  const navigate = useNavigate();
+  useEffect(() => {
+    !state.isAuthenticated
+      ? navigate("/admin/login")
+      : navigate("/admin/dashboard");
+  }, [state.isAuthenticated]);
 
   return (
     <div className="h-full">
@@ -44,7 +49,7 @@ function Main() {
           </div>
         </div>
       </div>
-      {state.globalMessage && <SnackBar />}
+      <SnackBar />
     </div>
   );
 }
